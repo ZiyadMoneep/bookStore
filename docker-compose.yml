@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./postgres_data/db:/var/lib/postgres/data
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    environment:
+      - "DJANGO_SECRET_KEY=QHru7iatgbBPxFzxZKg3QNHFunoCUy-7v43WpM3vwN8fnvNsQ3k"
+      - "DJANGO_DEBUG=TRUE"
+      - "DJANGO_DEBUG=True"
+      - "DJANGO_SECURE_SSL_REDIRECT=True"
+      - "DJANGO_SECURE_HSTS_SECONDS=2592000"
+      - "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=True"
+      - "DJANGO_SECURE_HSTS_PRELOAD=True"
+      - "DJANGO_SESSION_COOKIE_SECURE=True"
+      - "DJANGO_CSRF_COOKIE_SECURE=True"
+    depends_on:
+      - db
